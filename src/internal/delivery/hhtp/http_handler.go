@@ -1,9 +1,12 @@
 package hhtp
 
 import (
+	"MusicLibraryAPI/src/internal/payload/request"
 	"MusicLibraryAPI/src/internal/payload/response"
 	"MusicLibraryAPI/src/internal/service"
+	"errors"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 	"strings"
@@ -115,4 +118,36 @@ func (h *SongHandler) GetSongText(c echo.Context) error {
 		"page":         page,
 		"limit":        limit,
 	})
+}
+
+func (h *SongHandler) DeleteSong(c echo.Context) error {
+	songName := c.QueryParam("song")
+
+	err := h.service.DeleteSongByName(songName)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.JSON(http.StatusNotFound, map[string]string{"error": "Song not found"})
+		}
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"message": "Song deleted successfully"})
+}
+
+func (h *SongHandler) UpdateSong(c echo.Context) error {
+	var updateRequest request.UpdateSongRequest
+	if err := c.Bind(&updateRequest); err != nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{"error": err.Error()})
+	}
+
+	songName := c.QueryParam("song")
+	err := h.service.UpdateSongByName(songName, updateRequest)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.JSON(http.StatusNotFound, echo.Map{"error": "Song not found"})
+		}
+		return c.JSON(http.StatusInternalServerError, echo.Map{"error": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, echo.Map{"message": "Song updated successfully"})
 }

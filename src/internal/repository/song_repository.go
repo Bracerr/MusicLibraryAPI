@@ -51,3 +51,15 @@ func (r *SongRepository) GetSongByName(song string) (*domain.Song, error) {
 
 	return &songResult, nil
 }
+
+func (r *SongRepository) DeleteSongByName(song string) error {
+	result := r.db.Where("song = ?", song).Delete(&domain.Song{})
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return result.Error
+}
+
+func (r *SongRepository) UpdateSong(song domain.Song) error {
+	return r.db.Save(&song).Error
+}
