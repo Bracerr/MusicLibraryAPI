@@ -1,10 +1,11 @@
-package hhtp
+package http
 
 import (
 	"MusicLibraryAPI/src/internal/payload/request"
 	"MusicLibraryAPI/src/internal/payload/response"
 	"MusicLibraryAPI/src/internal/service"
 	"errors"
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"net/http"
@@ -14,6 +15,11 @@ import (
 
 type SongHandler struct {
 	service *service.SongService
+}
+
+func validateStruct(s interface{}) error {
+	validate := validator.New()
+	return validate.Struct(s)
 }
 
 func NewSongHandler(service *service.SongService) *SongHandler {
@@ -67,6 +73,17 @@ func (h *SongHandler) GetSongs(c echo.Context) error {
 	})
 }
 
+// GetSongText godoc
+// @Title GetUser
+// @Description Get user information
+// @Accept  json
+// @Param nick_name formData string true "nickname"
+// @Param user_name formData string true "user name"
+// @Param password formData string true "password"
+// @Param age formData int true "age"
+// @Success 200 "Successfully obtained information"
+// @Failure 400 "Failed to obtain information"
+// @Router /getUser [get]
 func (h *SongHandler) GetSongText(c echo.Context) error {
 	songName := c.QueryParam("song")
 	pageStr := c.QueryParam("page")
@@ -150,4 +167,31 @@ func (h *SongHandler) UpdateSong(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, echo.Map{"message": "Song updated successfully"})
+}
+
+func (h *SongHandler) CreateSong(c echo.Context) error {
+	var addSongRequest request.AddSongRequest
+	if err := c.Bind(&addSongRequest); err != nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{"error": err.Error()})
+	}
+	err := validateStruct(addSongRequest)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{"error": err.Error()})
+	}
+	err = h.service.CreateSong(addSongRequest)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{"error": err.Error()})
+	}
+	return c.JSON(http.StatusOK, echo.Map{"message": "Song created successfully"})
+}
+
+func (h *SongHandler) GetSongBySongAndGroup(c echo.Context) error {
+	songName := c.QueryParam("song")
+	groupName := c.QueryParam("group")
+	song, err := h.service.GetSongBySongAndGroup(songName, groupName)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{"error": err.Error()})
+	}
+	return c.JSON(http.StatusOK, song)
+
 }

@@ -63,3 +63,21 @@ func (r *SongRepository) DeleteSongByName(song string) error {
 func (r *SongRepository) UpdateSong(song domain.Song) error {
 	return r.db.Save(&song).Error
 }
+
+func (r *SongRepository) InsertSong(song domain.Song) error {
+	return r.db.Create(&song).Error
+}
+
+func (r *SongRepository) GetSongBySongAndGroup(song, group string) (*domain.Song, error) {
+	var songResult domain.Song
+
+	err := r.db.Model(&domain.Song{}).
+		Where("group_name = ? AND song = ?", group, song).
+		First(&songResult).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &songResult, nil
+}

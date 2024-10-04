@@ -56,3 +56,18 @@ func (s *SongService) UpdateSongByName(songName string, updateRequest request.Up
 
 	return s.repo.UpdateSong(*song)
 }
+
+func (s *SongService) CreateSong(songRequest request.AddSongRequest) error {
+	song := domain.Song{
+		GroupName:   songRequest.Group,
+		Song:        songRequest.Song,
+		ReleaseDate: time.Now(),
+		Text:        "",
+		Link:        "",
+	}
+	return s.repo.InsertSong(song)
+}
+
+func (s *SongService) GetSongBySongAndGroup(song string, group string) (*domain.Song, error) {
+	return s.repo.GetSongBySongAndGroup(song, group)
+}
