@@ -293,7 +293,7 @@ const docTemplate = `{
         },
         "/text": {
             "get": {
-                "description": "Retrieve the text of a song by its name, with optional pagination for verses. 1 page= 1 verse",
+                "description": "Retrieve the text of a song by its name, with optional pagination for verses. 1 page= 1 verse.(Work for Led Zeppelin Stairway to Heaven)",
                 "consumes": [
                     "application/json"
                 ],

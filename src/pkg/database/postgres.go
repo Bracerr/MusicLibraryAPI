@@ -8,6 +8,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
+	"os"
 )
 
 type DbInitModel struct {
@@ -37,10 +38,16 @@ func NewClient(dbModel DbInitModel) *gorm.DB {
 func ApplyMigrations(dbModel DbInitModel) {
 	dsn := "postgres://" + dbModel.DbUser + ":" + dbModel.DbPassword + "@" + dbModel.DbHost + ":" + dbModel.DbPort + "/" + dbModel.DbName + "?sslmode=disable"
 
+	migrationPath := os.Getenv("MIGRATION_PATH")
+	if migrationPath == "" {
+		migrationPath = "file://../internal/db/migrations"
+	}
+
 	m, err := migrate.New(
-		"file://../internal/db/migrations",
+		migrationPath,
 		dsn,
 	)
+
 	if err != nil {
 		log.Fatalf("failed to create migrate instance: %v", err)
 	}

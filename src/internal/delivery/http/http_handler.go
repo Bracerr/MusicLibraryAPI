@@ -91,7 +91,7 @@ func (h *SongHandler) GetSongs(c echo.Context) error {
 
 // GetSongText godoc
 // @Summary Get the text of a song
-// @Description Retrieve the text of a song by its name, with optional pagination for verses. 1 page= 1 verse
+// @Description Retrieve the text of a song by its name, with optional pagination for verses. 1 page= 1 verse.(Work for Led Zeppelin Stairway to Heaven)
 // @Accept  json
 // @Produce  json
 // @Param song query string true "Name of the song to retrieve"
