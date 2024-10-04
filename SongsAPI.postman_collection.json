@@ -1,0 +1,271 @@
+{
+	"info": {
+		"_postman_id": "88f3ecfe-6eef-4eab-a68a-d8561fef1c05",
+		"name": "SongsAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "31298852"
+	},
+	"item": [
+		{
+			"name": "GetAll",
+			"item": [
+				{
+					"name": "NoFilter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:63342/?page=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "63342",
+							"path": [
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Group&Limit",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:63342?group=The%20Beatles&limit=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "63342",
+							"query": [
+								{
+									"key": "group",
+									"value": "The%20Beatles"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Song&Page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:63342?song=Hey Jude&page=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "63342",
+							"query": [
+								{
+									"key": "song",
+									"value": "Hey Jude"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GroupSongDate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:63342?group=Queen&song=Bohemian%20Rhapsody&start_date=1975-01-01&end_date=1975-12-31",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "63342",
+							"query": [
+								{
+									"key": "group",
+									"value": "Queen"
+								},
+								{
+									"key": "song",
+									"value": "Bohemian%20Rhapsody"
+								},
+								{
+									"key": "start_date",
+									"value": "1975-01-01"
+								},
+								{
+									"key": "end_date",
+									"value": "1975-12-31"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DateInterval",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:63342?start_date=1990-01-01&end_date=2000-01-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "63342",
+							"query": [
+								{
+									"key": "start_date",
+									"value": "1990-01-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2000-01-01"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GetSongText",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:63342/text?song=Stairway to Heaven&page=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "63342",
+					"path": [
+						"text"
+					],
+					"query": [
+						{
+							"key": "song",
+							"value": "Stairway to Heaven"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteSong",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:63342/song=Let It Be"
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateSong",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"release_date\": \"1968-08-26\",\r\n    \"text\": \"test_text2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:63342/?song=Hey Jude",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "63342",
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "song",
+							"value": "Hey Jude"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddSong",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"song\": \"Master of puppets\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:63342"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSongInfo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:63342/info?group=The%20Beatles&song=Hey%20Jude",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "63342",
+					"path": [
+						"info"
+					],
+					"query": [
+						{
+							"key": "group",
+							"value": "The%20Beatles"
+						},
+						{
+							"key": "song",
+							"value": "Hey%20Jude"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

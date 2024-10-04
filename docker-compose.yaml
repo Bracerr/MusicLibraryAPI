@@ -13,5 +13,21 @@ services:
     volumes:
       - music_library_data:/var/lib/postgresql/data
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: wasted
+      DB_NAME: MusicLibrary
+      DB_PORT: 5432
+      SERVER_PORT: :63342
+    ports:
+      - "63342:63342"
+    depends_on:
+      - db
+
 volumes:
   music_library_data:
