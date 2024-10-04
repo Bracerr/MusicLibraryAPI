@@ -4,7 +4,6 @@ import (
 	"MusicLibraryAPI/src/internal/delivery/http"
 	"MusicLibraryAPI/src/internal/service"
 	"github.com/labstack/echo/v4"
-	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 func SetupSongRoutes(e *echo.Echo, songService *service.SongService) {
@@ -16,7 +15,5 @@ func SetupSongRoutes(e *echo.Echo, songService *service.SongService) {
 	e.PUT("", songHandler.UpdateSong)
 	e.POST("", songHandler.CreateSong)
 	e.GET("/info", songHandler.GetSongBySongAndGroup)
-
-	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 }

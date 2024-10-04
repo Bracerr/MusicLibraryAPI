@@ -1,0 +1,302 @@
+definitions:
+  request.AddSongRequest:
+    properties:
+      group:
+        type: string
+      song:
+        type: string
+    required:
+    - group
+    - song
+    type: object
+  request.UpdateSongRequest:
+    properties:
+      group_name:
+        type: string
+      link:
+        type: string
+      release_date:
+        type: string
+      song:
+        type: string
+      text:
+        type: string
+    type: object
+  response.SongResponse:
+    properties:
+      group:
+        type: string
+      link:
+        type: string
+      release_date:
+        type: string
+      song:
+        type: string
+      text:
+        type: string
+    type: object
+  response.SongTextResponse:
+    properties:
+      group:
+        type: string
+      limit:
+        type: integer
+      page:
+        type: integer
+      release_date:
+        type: string
+      song:
+        type: string
+      verses:
+        items:
+          type: string
+        type: array
+    type: object
+  response.SongsResponse:
+    properties:
+      limit:
+        type: integer
+      page:
+        type: integer
+      songs:
+        items:
+          $ref: '#/definitions/response.SongResponse'
+        type: array
+      total:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a song by its name.
+      parameters:
+      - description: Name of the song to delete
+        in: query
+        name: song
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully deleted song
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request, invalid parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Song not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error, returns an object with an 'error' field
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a song
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of songs based on optional filters such as group
+        name, song name, release date range, and pagination.
+      parameters:
+      - description: Group name to filter songs
+        in: query
+        name: group
+        type: string
+      - description: Song name to filter songs
+        in: query
+        name: song
+        type: string
+      - description: 'Start date to filter songs (format: YYYY-MM-DD)'
+        in: query
+        name: start_date
+        type: string
+      - description: 'End date to filter songs (format: YYYY-MM-DD)'
+        in: query
+        name: end_date
+        type: string
+      - description: Page number for pagination (default is 1)
+        in: query
+        name: page
+        type: integer
+      - description: Number of songs per page (default is 10)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved songs
+          schema:
+            $ref: '#/definitions/response.SongsResponse'
+        "500":
+          description: Internal server error, returns an object with an 'error' field
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a list of songs
+    post:
+      consumes:
+      - application/json
+      description: Create a new song with the provided details.
+      parameters:
+      - description: Details of the song to create
+        in: body
+        name: addSongRequest
+        required: true
+        schema:
+          $ref: '#/definitions/request.AddSongRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully created song
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request, invalid parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new song
+    put:
+      consumes:
+      - application/json
+      description: Update the details of a song by its name.
+      parameters:
+      - description: Name of the song to update
+        in: query
+        name: song
+        required: true
+        type: string
+      - description: Details to update the song. Only the field that was passed is
+          updated
+        in: body
+        name: updateRequest
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateSongRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully updated song
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request, invalid parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Song not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error, returns an object with an 'error' field
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a song
+  /info:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a song based on its name and the group it belongs to.
+      parameters:
+      - description: Name of the song to retrieve
+        in: query
+        name: song
+        required: true
+        type: string
+      - description: Name of the group to filter the song
+        in: query
+        name: group
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved song
+          schema:
+            $ref: '#/definitions/response.SongResponse'
+        "400":
+          description: Bad request, invalid parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a song by its name and group
+  /text:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve the text of a song by its name, with optional pagination
+        for verses. 1 page= 1 verse
+      parameters:
+      - description: Name of the song to retrieve
+        in: query
+        name: song
+        required: true
+        type: string
+      - description: Page number for pagination (default is 1)
+        in: query
+        name: page
+        type: integer
+      - description: Number of verses per page (default is 1)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved song text
+          schema:
+            $ref: '#/definitions/response.SongTextResponse'
+        "400":
+          description: Bad request, invalid parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Song not found or no verses found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error, returns an object with an 'error' field
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get the text of a song
+swagger: "2.0"
